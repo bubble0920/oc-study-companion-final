@@ -1,0 +1,281 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+
+  /* Sakura is the default app theme. */
+  --app-page-background: #fff8f4;
+  --app-card-background: #ffffff;
+  --app-soft-background: #f5d8c8;
+  --app-primary: #4a302b;
+  --app-primary-hover: #68463d;
+  --app-accent: #a86f5d;
+  --app-accent-soft: #f2e8e2;
+  --app-progress: #d58d71;
+  --app-progress-background: #f2e8e2;
+  --app-main-text: #392d2a;
+  --app-secondary-text: #806d66;
+  --app-muted-text: #a08e87;
+  --app-border: #eadfd8;
+  --app-success-background: #e9f0e4;
+  --app-success-text: #557451;
+
+  --theme-lavender-page-background: #f8f5ff;
+  --theme-lavender-card-background: #ffffff;
+  --theme-lavender-soft-background: #ede5f8;
+  --theme-lavender-primary: #493b63;
+  --theme-lavender-primary-hover: #62517d;
+  --theme-lavender-accent: #8e72ae;
+  --theme-lavender-accent-soft: #f0eaf8;
+  --theme-lavender-progress: #a58ac4;
+  --theme-lavender-progress-background: #eee8f5;
+  --theme-lavender-main-text: #393342;
+  --theme-lavender-secondary-text: #756b82;
+  --theme-lavender-muted-text: #9a91a5;
+  --theme-lavender-border: #e5ddec;
+  --theme-lavender-success-background: #e7f0e7;
+  --theme-lavender-success-text: #58745a;
+
+  --theme-forest-page-background: #f4f9f1;
+  --theme-forest-card-background: #ffffff;
+  --theme-forest-soft-background: #dfebdc;
+  --theme-forest-primary: #344b36;
+  --theme-forest-primary-hover: #49634b;
+  --theme-forest-accent: #668c61;
+  --theme-forest-accent-soft: #eaf2e7;
+  --theme-forest-progress: #82a879;
+  --theme-forest-progress-background: #e5eee2;
+  --theme-forest-main-text: #303b31;
+  --theme-forest-secondary-text: #667367;
+  --theme-forest-muted-text: #919c92;
+  --theme-forest-border: #dce6d9;
+  --theme-forest-success-background: #e1ede0;
+  --theme-forest-success-text: #4f714c;
+
+  --theme-baby-blue-page-background: #f3f9ff;
+  --theme-baby-blue-card-background: #ffffff;
+  --theme-baby-blue-soft-background: #ddeef9;
+  --theme-baby-blue-primary: #35495e;
+  --theme-baby-blue-primary-hover: #4a627a;
+  --theme-baby-blue-accent: #6fa6ce;
+  --theme-baby-blue-accent-soft: #e8f4fc;
+  --theme-baby-blue-progress: #83b7dc;
+  --theme-baby-blue-progress-background: #e5f1fa;
+  --theme-baby-blue-main-text: #303c48;
+  --theme-baby-blue-secondary-text: #687989;
+  --theme-baby-blue-muted-text: #94a2ae;
+  --theme-baby-blue-border: #dce8f1;
+  --theme-baby-blue-success-background: #e6f0e8;
+  --theme-baby-blue-success-text: #55715a;
+
+  --theme-cream-page-background: #fffcf0;
+  --theme-cream-card-background: #ffffff;
+  --theme-cream-soft-background: #f8efcb;
+  --theme-cream-primary: #5a5035;
+  --theme-cream-primary-hover: #716443;
+  --theme-cream-accent: #c9aa55;
+  --theme-cream-accent-soft: #faf3d9;
+  --theme-cream-progress: #e5c96b;
+  --theme-cream-progress-background: #f5eed6;
+  --theme-cream-main-text: #403b2d;
+  --theme-cream-secondary-text: #776f59;
+  --theme-cream-muted-text: #a09a87;
+  --theme-cream-border: #ece3c9;
+  --theme-cream-success-background: #e8f0e2;
+  --theme-cream-success-text: #58734f;
+
+  --theme-calm-red-page-background: #fff6f5;
+  --theme-calm-red-card-background: #ffffff;
+  --theme-calm-red-soft-background: #f5dedc;
+  --theme-calm-red-primary: #5a3535;
+  --theme-calm-red-primary-hover: #734747;
+  --theme-calm-red-accent: #a96868;
+  --theme-calm-red-accent-soft: #f8e9e8;
+  --theme-calm-red-progress: #c98282;
+  --theme-calm-red-progress-background: #f4e3e2;
+  --theme-calm-red-main-text: #403232;
+  --theme-calm-red-secondary-text: #796666;
+  --theme-calm-red-muted-text: #a18e8e;
+  --theme-calm-red-border: #ebdddd;
+  --theme-calm-red-success-background: #e7efe5;
+  --theme-calm-red-success-text: #58704f;
+
+  --theme-cream-white-page-background: #faf9f5;
+  --theme-cream-white-card-background: #ffffff;
+  --theme-cream-white-soft-background: #f0eee7;
+  --theme-cream-white-primary: #484642;
+  --theme-cream-white-primary-hover: #5f5c56;
+  --theme-cream-white-accent: #918c80;
+  --theme-cream-white-accent-soft: #f3f1eb;
+  --theme-cream-white-progress: #b8b2a8;
+  --theme-cream-white-progress-background: #eae7df;
+  --theme-cream-white-main-text: #3f3d39;
+  --theme-cream-white-secondary-text: #77736b;
+  --theme-cream-white-muted-text: #a09c94;
+  --theme-cream-white-border: #e4e1d9;
+  --theme-cream-white-success-background: #e7ece4;
+  --theme-cream-white-success-text: #5d6b58;
+
+  --theme-deep-blue-page-background: #e8eef9;
+  --theme-deep-blue-card-background: #ffffff;
+  --theme-deep-blue-soft-background: #d5e0f5;
+  --theme-deep-blue-primary: #172554;
+  --theme-deep-blue-primary-hover: #263b78;
+  --theme-deep-blue-accent: #4f63ad;
+  --theme-deep-blue-accent-soft: #e2e8f8;
+  --theme-deep-blue-progress: #586fc0;
+  --theme-deep-blue-progress-background: #dce4f5;
+  --theme-deep-blue-main-text: #202c4a;
+  --theme-deep-blue-secondary-text: #5f6d8a;
+  --theme-deep-blue-muted-text: #8995ad;
+  --theme-deep-blue-border: #cfd9ed;
+  --theme-deep-blue-success-background: #e3ede8;
+  --theme-deep-blue-success-text: #52705d;
+}
+
+:root[data-theme="lavender"] {
+  --app-page-background: var(--theme-lavender-page-background);
+  --app-card-background: var(--theme-lavender-card-background);
+  --app-soft-background: var(--theme-lavender-soft-background);
+  --app-primary: var(--theme-lavender-primary);
+  --app-primary-hover: var(--theme-lavender-primary-hover);
+  --app-accent: var(--theme-lavender-accent);
+  --app-accent-soft: var(--theme-lavender-accent-soft);
+  --app-progress: var(--theme-lavender-progress);
+  --app-progress-background: var(--theme-lavender-progress-background);
+  --app-main-text: var(--theme-lavender-main-text);
+  --app-secondary-text: var(--theme-lavender-secondary-text);
+  --app-muted-text: var(--theme-lavender-muted-text);
+  --app-border: var(--theme-lavender-border);
+  --app-success-background: var(--theme-lavender-success-background);
+  --app-success-text: var(--theme-lavender-success-text);
+}
+
+:root[data-theme="forest"] {
+  --app-page-background: var(--theme-forest-page-background);
+  --app-card-background: var(--theme-forest-card-background);
+  --app-soft-background: var(--theme-forest-soft-background);
+  --app-primary: var(--theme-forest-primary);
+  --app-primary-hover: var(--theme-forest-primary-hover);
+  --app-accent: var(--theme-forest-accent);
+  --app-accent-soft: var(--theme-forest-accent-soft);
+  --app-progress: var(--theme-forest-progress);
+  --app-progress-background: var(--theme-forest-progress-background);
+  --app-main-text: var(--theme-forest-main-text);
+  --app-secondary-text: var(--theme-forest-secondary-text);
+  --app-muted-text: var(--theme-forest-muted-text);
+  --app-border: var(--theme-forest-border);
+  --app-success-background: var(--theme-forest-success-background);
+  --app-success-text: var(--theme-forest-success-text);
+}
+
+:root[data-theme="baby-blue"] {
+  --app-page-background: var(--theme-baby-blue-page-background);
+  --app-card-background: var(--theme-baby-blue-card-background);
+  --app-soft-background: var(--theme-baby-blue-soft-background);
+  --app-primary: var(--theme-baby-blue-primary);
+  --app-primary-hover: var(--theme-baby-blue-primary-hover);
+  --app-accent: var(--theme-baby-blue-accent);
+  --app-accent-soft: var(--theme-baby-blue-accent-soft);
+  --app-progress: var(--theme-baby-blue-progress);
+  --app-progress-background: var(--theme-baby-blue-progress-background);
+  --app-main-text: var(--theme-baby-blue-main-text);
+  --app-secondary-text: var(--theme-baby-blue-secondary-text);
+  --app-muted-text: var(--theme-baby-blue-muted-text);
+  --app-border: var(--theme-baby-blue-border);
+  --app-success-background: var(--theme-baby-blue-success-background);
+  --app-success-text: var(--theme-baby-blue-success-text);
+}
+
+:root[data-theme="cream-yellow"] {
+  --app-page-background: var(--theme-cream-page-background);
+  --app-card-background: var(--theme-cream-card-background);
+  --app-soft-background: var(--theme-cream-soft-background);
+  --app-primary: var(--theme-cream-primary);
+  --app-primary-hover: var(--theme-cream-primary-hover);
+  --app-accent: var(--theme-cream-accent);
+  --app-accent-soft: var(--theme-cream-accent-soft);
+  --app-progress: var(--theme-cream-progress);
+  --app-progress-background: var(--theme-cream-progress-background);
+  --app-main-text: var(--theme-cream-main-text);
+  --app-secondary-text: var(--theme-cream-secondary-text);
+  --app-muted-text: var(--theme-cream-muted-text);
+  --app-border: var(--theme-cream-border);
+  --app-success-background: var(--theme-cream-success-background);
+  --app-success-text: var(--theme-cream-success-text);
+}
+
+:root[data-theme="calm-red"] {
+  --app-page-background: var(--theme-calm-red-page-background);
+  --app-card-background: var(--theme-calm-red-card-background);
+  --app-soft-background: var(--theme-calm-red-soft-background);
+  --app-primary: var(--theme-calm-red-primary);
+  --app-primary-hover: var(--theme-calm-red-primary-hover);
+  --app-accent: var(--theme-calm-red-accent);
+  --app-accent-soft: var(--theme-calm-red-accent-soft);
+  --app-progress: var(--theme-calm-red-progress);
+  --app-progress-background: var(--theme-calm-red-progress-background);
+  --app-main-text: var(--theme-calm-red-main-text);
+  --app-secondary-text: var(--theme-calm-red-secondary-text);
+  --app-muted-text: var(--theme-calm-red-muted-text);
+  --app-border: var(--theme-calm-red-border);
+  --app-success-background: var(--theme-calm-red-success-background);
+  --app-success-text: var(--theme-calm-red-success-text);
+}
+
+:root[data-theme="cream-white"] {
+  --app-page-background: var(--theme-cream-white-page-background);
+  --app-card-background: var(--theme-cream-white-card-background);
+  --app-soft-background: var(--theme-cream-white-soft-background);
+  --app-primary: var(--theme-cream-white-primary);
+  --app-primary-hover: var(--theme-cream-white-primary-hover);
+  --app-accent: var(--theme-cream-white-accent);
+  --app-accent-soft: var(--theme-cream-white-accent-soft);
+  --app-progress: var(--theme-cream-white-progress);
+  --app-progress-background: var(--theme-cream-white-progress-background);
+  --app-main-text: var(--theme-cream-white-main-text);
+  --app-secondary-text: var(--theme-cream-white-secondary-text);
+  --app-muted-text: var(--theme-cream-white-muted-text);
+  --app-border: var(--theme-cream-white-border);
+  --app-success-background: var(--theme-cream-white-success-background);
+  --app-success-text: var(--theme-cream-white-success-text);
+}
+
+:root[data-theme="deep-blue"] {
+  --app-page-background: var(--theme-deep-blue-page-background);
+  --app-card-background: var(--theme-deep-blue-card-background);
+  --app-soft-background: var(--theme-deep-blue-soft-background);
+  --app-primary: var(--theme-deep-blue-primary);
+  --app-primary-hover: var(--theme-deep-blue-primary-hover);
+  --app-accent: var(--theme-deep-blue-accent);
+  --app-accent-soft: var(--theme-deep-blue-accent-soft);
+  --app-progress: var(--theme-deep-blue-progress);
+  --app-progress-background: var(--theme-deep-blue-progress-background);
+  --app-main-text: var(--theme-deep-blue-main-text);
+  --app-secondary-text: var(--theme-deep-blue-secondary-text);
+  --app-muted-text: var(--theme-deep-blue-muted-text);
+  --app-border: var(--theme-deep-blue-border);
+  --app-success-background: var(--theme-deep-blue-success-background);
+  --app-success-text: var(--theme-deep-blue-success-text);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
