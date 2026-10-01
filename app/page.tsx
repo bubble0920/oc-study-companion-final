@@ -62,12 +62,16 @@ export default function Home() {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [studyPlans, setStudyPlans] = useState<StudyPlan[]>([]);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
+  const [isFirstTime, setIsFirstTime] = useState(false);
 
   useEffect(() => {
     const timeoutId = window.setTimeout(() => {
-      setCharacterProfile(getCharacterProfile());
-      setUserProfile(getUserProfile());
+      const savedCharacter = getCharacterProfile();
+      const savedUser = getUserProfile();
+      setCharacterProfile(savedCharacter);
+      setUserProfile(savedUser);
       setStudyPlans(getStudyPlans());
+      setIsFirstTime(!savedCharacter && !savedUser);
       const savedTheme = window.localStorage.getItem("oc-study-theme");
       document.documentElement.dataset.theme = isThemeId(savedTheme)
         ? savedTheme
@@ -128,6 +132,60 @@ export default function Home() {
       total + (Number.isFinite(plan.actualDuration) ? plan.actualDuration : 0),
     0,
   );
+
+  if (!isDataLoaded) {
+    return (
+      <main className="min-h-screen bg-[var(--app-page-background)] px-5 py-10 text-[var(--app-main-text)] sm:px-10">
+        <div className="mx-auto max-w-3xl text-sm text-[var(--app-secondary-text)]">正在加载...</div>
+      </main>
+    );
+  }
+
+  if (isFirstTime) {
+    return (
+      <main className="min-h-screen bg-[var(--app-page-background)] px-5 py-10 text-[var(--app-main-text)] sm:px-10">
+        <div className="mx-auto flex max-w-2xl flex-col items-center justify-center py-16 text-center sm:py-24">
+          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[var(--app-accent)]">
+            OC companion
+          </p>
+          <h1 className="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl">
+            创建属于你的 OC 学习搭子
+          </h1>
+          <p className="mt-5 max-w-lg leading-7 text-[var(--app-secondary-text)]">
+            让你喜欢的角色陪你学习、提醒你坚持，也可以按照你的设定和语气陪伴你。
+          </p>
+          <div className="mt-9 grid w-full max-w-xl gap-3 text-left sm:grid-cols-3">
+            <div className="rounded-2xl border border-[var(--app-border)] bg-[var(--app-card-background)] p-4">
+              <p className="font-semibold text-[var(--app-primary)]">自定义 OC</p>
+              <p className="mt-2 text-sm leading-6 text-[var(--app-secondary-text)]">设置角色名字、形象和人格</p>
+            </div>
+            <div className="rounded-2xl border border-[var(--app-border)] bg-[var(--app-card-background)] p-4">
+              <p className="font-semibold text-[var(--app-primary)]">个性化陪伴</p>
+              <p className="mt-2 text-sm leading-6 text-[var(--app-secondary-text)]">设置角色的语言风格和说话方式</p>
+            </div>
+            <div className="rounded-2xl border border-[var(--app-border)] bg-[var(--app-card-background)] p-4">
+              <p className="font-semibold text-[var(--app-primary)]">学习计划</p>
+              <p className="mt-2 text-sm leading-6 text-[var(--app-secondary-text)]">创建学习任务，并在学习过程中获得 OC 陪伴</p>
+            </div>
+          </div>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <a
+              className="rounded-full bg-[var(--app-primary)] px-6 py-3 text-sm font-semibold text-[var(--app-card-background)] transition hover:bg-[var(--app-primary-hover)]"
+              href="/oc"
+            >
+              开始创建我的 OC
+            </a>
+            <a
+              className="rounded-full border border-[var(--app-accent)] px-6 py-3 text-sm font-semibold text-[var(--app-primary-hover)] transition hover:bg-[var(--app-accent-soft)]"
+              href="/user"
+            >
+              设置我的信息
+            </a>
+          </div>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-[var(--app-page-background)] px-5 py-8 text-[var(--app-main-text)] sm:px-10 lg:px-16">
@@ -191,8 +249,26 @@ export default function Home() {
               </div>
               <div className="flex flex-col items-center gap-1 text-[var(--app-accent)]" aria-hidden="true">
                 <svg className="h-8 w-20" viewBox="0 0 80 32" fill="none">
-                  <path d="M4 21C20 9 39 9 66 17" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" />
-                  <polygon points="65 14, 74 21, 64.5 23" fill="currentColor" />
+                  <defs>
+                    <marker
+                      id="arrowhead"
+                      viewBox="0 0 8 8"
+                      refX="0"
+                      refY="4"
+                      markerWidth="4"
+                      markerHeight="4"
+                      orient="auto-start-reverse"
+                    >
+                      <path d="M0 0 L 8 4 L 0 8 Z" fill="currentColor" />
+                    </marker>
+                  </defs>
+                  <path
+                    d="M4 21 C 20 7, 50 7, 66 17"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    markerEnd="url(#arrowhead)"
+                  />
                   <path d="M39 11C37.5 8.5 33 9.5 34.5 12.5C36 15 39 16.5 39 16.5C39 16.5 42 15 43.5 12.5C45 9.5 40.5 8.5 39 11Z" fill="var(--app-accent-soft)" stroke="currentColor" strokeWidth="1" />
                 </svg>
                 <span className="text-xs">陪伴</span>

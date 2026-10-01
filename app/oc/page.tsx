@@ -60,6 +60,84 @@ function normalizeStyleSamples(value: unknown): CharacterStyleSamples {
   }, createEmptyProfile().styleSamples);
 }
 
+function readFileAsDataUrl(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.addEventListener("load", () => {
+      if (typeof reader.result === "string") {
+        resolve(reader.result);
+      } else {
+        reject(new Error("无法读取图片文件"));
+      }
+    });
+    reader.addEventListener("error", () => reject(new Error("无法读取图片文件")));
+    reader.readAsDataURL(file);
+  });
+}
+
+async function prepareCharacterImage(file: File): Promise<string> {
+  const originalDataUrl = await readFileAsDataUrl(file);
+  const image = new Image();
+
+  await new Promise<void>((resolve, reject) => {
+    image.addEventListener("load", () => resolve(), { once: true });
+    image.addEventListener("error", () => reject(new Error("无法解析图片")), { once: true });
+    image.src = originalDataUrl;
+  });
+
+  const maxDimension = 1200;
+  const longestSide = Math.max(image.naturalWidth, image.naturalHeight);
+  const scale = Math.min(1, maxDimension / longestSide);
+  const shouldCompress = scale < 1 || file.size > 400 * 1024;
+
+  if (!shouldCompress) {
+    return originalDataUrl;
+  }
+
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.max(1, Math.round(image.naturalWidth * scale));
+  canvas.height = Math.max(1, Math.round(image.naturalHeight * scale));
+  const context = canvas.getContext("2d");
+  if (!context) {
+    throw new Error("浏览器暂不支持图片压缩");
+  }
+
+  context.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+  if (file.type === "image/png") {
+    const webpDataUrl = canvas.toDataURL("image/webp", 0.82);
+    if (webpDataUrl.startsWith("data:image/webp") && webpDataUrl.length < originalDataUrl.length) {
+      return webpDataUrl;
+    }
+
+    const pngDataUrl = canvas.toDataURL("image/png");
+    if (pngDataUrl.length < originalDataUrl.length) {
+      return pngDataUrl;
+    }
+  }
+
+  let smallestDataUrl = originalDataUrl;
+  for (const quality of [0.82, 0.7, 0.58, 0.46]) {
+    const webpDataUrl = canvas.toDataURL("image/webp", quality);
+    const compressedDataUrl = webpDataUrl.startsWith("data:image/webp")
+      ? webpDataUrl
+      : canvas.toDataURL("image/jpeg", quality);
+
+    if (compressedDataUrl.length < smallestDataUrl.length) {
+      smallestDataUrl = compressedDataUrl;
+    }
+    if (compressedDataUrl.length <= 700_000 && compressedDataUrl.length < originalDataUrl.length) {
+      return compressedDataUrl;
+    }
+  }
+
+  if (smallestDataUrl.length < originalDataUrl.length) {
+    return smallestDataUrl;
+  }
+
+  throw new Error("图片压缩未能减小文件体积，请换一张较小的图片。");
+}
+
 export default function OCSettingsPage() {
   const [profile, setProfile] = useState<CharacterProfile>(createEmptyProfile);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -93,29 +171,34 @@ export default function OCSettingsPage() {
     setSaveMessage("");
   }
 
-  function handleImageChange(event: ChangeEvent<HTMLInputElement>) {
+  async function handleImageChange(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    const reader = new FileReader();
-    reader.addEventListener("load", () => {
-      if (typeof reader.result === "string") {
-        updateField("characterImage", reader.result);
-      }
-    });
-    reader.readAsDataURL(file);
+    try {
+      const imageDataUrl = await prepareCharacterImage(file);
+      updateField("characterImage", imageDataUrl);
+    } catch {
+      setSaveMessage("图片处理失败，请尝试使用 PNG、JPG 或 WebP 格式的较小图片。");
+    }
   }
 
   function updateStyleSample(style: CharacterStyle, index: number, value: string) {
-    setProfile((currentProfile) => ({
-      ...currentProfile,
-      styleSamples: {
-        ...currentProfile.styleSamples,
-        [style]: currentProfile.styleSamples[style].map((sample, sampleIndex) =>
-          sampleIndex === index ? value : sample,
-        ),
-      },
-    }));
+    setProfile((currentProfile) => {
+      const currentSamples = currentProfile.styleSamples[style];
+      const updatedSamples = [...currentSamples];
+      while (updatedSamples.length <= index) {
+        updatedSamples.push("");
+      }
+      updatedSamples[index] = value;
+      return {
+        ...currentProfile,
+        styleSamples: {
+          ...currentProfile.styleSamples,
+          [style]: updatedSamples,
+        },
+      };
+    });
     setSaveMessage("");
   }
 
@@ -150,7 +233,12 @@ export default function OCSettingsPage() {
       styleSamples: normalizeStyleSamples(profile.styleSamples),
     };
 
-    saveCharacterProfile(profileToSave);
+    const saved = saveCharacterProfile(profileToSave);
+    if (!saved) {
+      setSaveMessage("保存失败：浏览器未能写入本地存储，请检查存储空间或尝试使用较小的图片。");
+      return;
+    }
+
     setProfile(profileToSave);
     setSaveMessage("已保存");
   }
@@ -217,7 +305,7 @@ export default function OCSettingsPage() {
                   className="mt-2 w-full rounded-xl border border-[var(--app-border)] bg-[var(--app-page-background)] px-4 py-3 font-normal text-[var(--app-main-text)] outline-none transition focus:border-[var(--app-accent)]"
                   value={profile.name}
                   onChange={(event) => updateField("name", event.target.value)}
-                  placeholder="例如：星野"
+                  placeholder="例如：输入 OC 名字"
                 />
               </label>
               <label className="text-sm font-medium">
@@ -226,7 +314,7 @@ export default function OCSettingsPage() {
                   className="mt-2 w-full rounded-xl border border-[var(--app-border)] bg-[var(--app-page-background)] px-4 py-3 font-normal text-[var(--app-main-text)] outline-none transition focus:border-[var(--app-accent)]"
                   value={profile.nickname}
                   onChange={(event) => updateField("nickname", event.target.value)}
-                  placeholder="例如：小星"
+                  placeholder="例如：输入昵称"
                 />
               </label>
               <label className="text-sm font-medium">
@@ -253,7 +341,7 @@ export default function OCSettingsPage() {
                   className="mt-2 w-full rounded-xl border border-[var(--app-border)] bg-[var(--app-page-background)] px-4 py-3 font-normal text-[var(--app-main-text)] outline-none transition focus:border-[var(--app-accent)]"
                   value={profile.userAddress}
                   onChange={(event) => updateField("userAddress", event.target.value)}
-                  placeholder="例如：萱萱、同学"
+                  placeholder="输入希望 OC 使用的称呼"
                 />
               </label>
             </div>

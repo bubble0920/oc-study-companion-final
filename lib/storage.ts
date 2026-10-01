@@ -22,15 +22,17 @@ function readValue<T>(key: string, fallback: T): T {
   }
 }
 
-function writeValue<T>(key: string, value: T): void {
+function writeValue<T>(key: string, value: T): boolean {
   if (typeof window === "undefined") {
-    return;
+    return false;
   }
 
   try {
     window.localStorage.setItem(key, JSON.stringify(value));
+    return true;
   } catch {
     // MVP: storage errors are ignored so they do not break the UI.
+    return false;
   }
 }
 
@@ -38,9 +40,9 @@ export function getCharacterProfile(): CharacterProfile | null {
   return readValue<CharacterProfile | null>(STORAGE_KEYS.character, null);
 }
 
-export function saveCharacterProfile(profile: CharacterProfile): void {
+export function saveCharacterProfile(profile: CharacterProfile): boolean {
   // MVP stores image data URLs locally; production should use object storage/CDN URLs.
-  writeValue(STORAGE_KEYS.character, profile);
+  return writeValue(STORAGE_KEYS.character, profile);
 }
 
 export function getUserProfile(): UserProfile | null {

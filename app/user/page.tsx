@@ -163,7 +163,7 @@ export default function UserSettingsPage() {
                 className="mt-2 w-full rounded-xl border border-[var(--app-border)] bg-[var(--app-page-background)] px-4 py-3 font-normal text-[var(--app-main-text)] outline-none transition focus:border-[var(--app-accent)]"
                 value={profile.name}
                 onChange={(event) => updateField("name", event.target.value)}
-                placeholder="例如：文萱"
+                placeholder="输入你的姓名"
               />
             </label>
             <label className="text-sm font-medium">
@@ -172,7 +172,7 @@ export default function UserSettingsPage() {
                 className="mt-2 w-full rounded-xl border border-[var(--app-border)] bg-[var(--app-page-background)] px-4 py-3 font-normal text-[var(--app-main-text)] outline-none transition focus:border-[var(--app-accent)]"
                 value={profile.nickname}
                 onChange={(event) => updateField("nickname", event.target.value)}
-                placeholder="例如：萱萱"
+                placeholder="输入你的昵称"
               />
             </label>
           </div>
